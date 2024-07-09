@@ -1,0 +1,15 @@
+.eventInfoDiv {
+    font-size: 20px;
+    padding: 20px;
+    box-shadow: 10px 10px 5px #888888, inset -5px -5px 10px #888888, -5px -5px 10px #888888;
+    margin: 30px;
+}
+.dateInput{
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    color: #000;
+}
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}

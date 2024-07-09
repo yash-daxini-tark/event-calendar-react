@@ -5,6 +5,7 @@ function App() {
 
   return (
     <div>
+      <h1 className='mb-5'>Event Calendar</h1>
       <Calendar />
     </div>
   )

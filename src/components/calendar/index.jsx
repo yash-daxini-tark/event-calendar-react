@@ -1,23 +1,24 @@
 import { useState, useRef } from 'react';
 import style from './style.module.css';
 import EventOp from '../event'
+import EventsView from '../events-view';
 
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const Calendar = () => {
 
-    let [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+    let [currentMonth, setCurrentMonth] = useState((new Date().getMonth()) + 1);
     let [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-    let [selectedDay, setSelectedDay] = useState(new Date().getDay());
-    let [prevSelectedDay, setPrevSelectedDay] = useState(null);
+    let [selectedDay, setSelectedDay] = useState(new Date().getDate());
+
     let divRefs = useRef([]);
 
     const handleClick = (index) => {
 
         divRefs.current.forEach(div => {
-            // if (div) {
+            if (div) {
                 div.classList.remove(`${style.click}`);
-            // }
+            }
         });
 
         if (divRefs.current[index]) {
@@ -35,19 +36,20 @@ const Calendar = () => {
         }
 
         for (let day = 1; day <= daysInMonth; day++) {
-            if (prevSelectedDay === null)
-                setPrevSelectedDay()
             days.push(
                 <div className={style.day} key={day}
                     ref={e => divRefs.current[day] = e}
-                    onClick={(e) => handleClick(day)}>{day}</div>);
+                    onClick={(e) => {
+                        setSelectedDay(day)
+                        handleClick(day);
+                    }}>{day}</div>);
         }
 
         return days;
     }
 
     function prevMonth() {
-        setCurrentMonth(prev => prev === 0 ? 11 : prev - 1);
+        setCurrentMonth(prev => prev === 1 ? 12 : prev - 1);
         if (currentMonth < 0) {
             setCurrentYear(prev => prev - 1);
         }
@@ -55,7 +57,7 @@ const Calendar = () => {
     }
 
     function nextMonth() {
-        setCurrentMonth(prev => prev === 11 ? 0 : prev + 1);
+        setCurrentMonth(prev => prev === 12 ? 1 : prev + 1);
         if (currentMonth > 11) {
             setCurrentYear(prev => prev + 1);
         }
@@ -67,10 +69,10 @@ const Calendar = () => {
 
     return (
         <>
-            <div className={style.Calendar}>
+            <div className={style.calendar}>
                 <div className={style.month}>
                     <div className={style.prev} onClick={() => prevMonth()}>&#10094;</div>
-                    <div className={style.month - name} id="month-name">{monthNames[currentMonth]} {currentYear}</div>
+                    <div className={`${style.month - name}`} id="month-name">{monthNames[currentMonth]} {currentYear}</div>
                     <div className={style.next} onClick={() => nextMonth()}>&#10095;</div>
                 </div>
                 <div className={style.weekdays}>
@@ -87,6 +89,7 @@ const Calendar = () => {
                 </div>
             </div>
             <EventOp eventDate={`${`${currentYear}-${currentMonth}-${selectedDay}`}`} />
+            <EventsView />
         </>
 
     )
